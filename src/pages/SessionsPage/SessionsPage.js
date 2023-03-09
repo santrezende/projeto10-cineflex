@@ -1,42 +1,54 @@
-import styled from "styled-components"
+import styled from "styled-components";
+import { useParams } from 'react-router-dom';
+import axios from "axios";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function SessionsPage() {
+
+    const { idFilme } = useParams();
+
+    const url = `https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`;
+    const [sessions, setSessions] = React.useState([]);
+    const [sessionsDays, setSessionsDays] = React.useState([]);
+
+    useEffect(() => {
+        const request = axios.get(url);
+
+        request.then(response => {
+            setSessions(response.data);
+            setSessionsDays(response.data.days);
+        });
+        request.catch(erro => {
+            console.log(erro.response.data);
+        })
+    }, []);
 
     return (
         <PageContainer>
             Selecione o horário
             <div>
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
+                {sessionsDays.map(day =>
 
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
-
-                <SessionContainer>
-                    Sexta - 03/03/2023
-                    <ButtonsContainer>
-                        <button>14:00</button>
-                        <button>15:00</button>
-                    </ButtonsContainer>
-                </SessionContainer>
+                    <SessionContainer data-test="movie-day" key={day.id}>
+                        {day.weekday} - {day.date}
+                        <ButtonsContainer>
+                            {day.showtimes.map(showtime =>
+                                <Link key={showtime.id} to={`/assentos/${showtime.id}`}>
+                                    <button data-test="showtime" key={showtime.id}>{showtime.name}</button>
+                                </Link>
+                            )}
+                        </ButtonsContainer>
+                    </SessionContainer>
+                )}
             </div>
 
-            <FooterContainer>
+            <FooterContainer data-test="footer">
                 <div>
-                    <img src={"https://br.web.img2.acsta.net/pictures/22/05/16/17/59/5165498.jpg"} alt="poster" />
+                    <img src={sessions.posterURL} alt="poster" />
                 </div>
                 <div>
-                    <p>Tudo em todo lugar ao mesmo tempo</p>
+                    <p>{sessions.title}</p>
                 </div>
             </FooterContainer>
 
