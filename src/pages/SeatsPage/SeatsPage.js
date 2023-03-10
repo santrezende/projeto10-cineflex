@@ -17,32 +17,101 @@ export default function SeatsPage() {
     useEffect(() => {
         const request = axios.get(url);
 
-        request.then(response => {
-            setSeats(response.data.seats);
-            setSessionData(response.data)
-            setSessionMovie(response.data.movie)
+        request.then((response) => {
+            setSeats(
+                response.data.seats.map((seat) => ({
+                    ...seat,
+                    isSelected: false,
+                }))
+            );
+            setSessionData(response.data);
+            setSessionMovie(response.data.movie);
             setSessionDay(response.data.day.weekday);
         });
-        request.catch(erro => {
+        request.catch((erro) => {
             console.log(erro.response.data);
-        })
+        });
     }, []);
 
-    console.log(seats);
+    const [arrayIds, setArrayIds] = React.useState([]);
+    const [name, setName] = React.useState("");
+    const [cpf, setCpf] = React.useState("");
+
+    const postTemplate =
+    {
+        ids: arrayIds,
+        name: name,
+        cpf: cpf
+    }
+
+    function selectSeat(seatId) {
+        if (!arrayIds.includes(seatId)) {
+            setArrayIds([...arrayIds, seatId]);
+        } else {
+            setArrayIds(arrayIds.filter(item => item != seatId));
+        }
+        setSeats(
+            seats.map((seat) => {
+                if (seat.id === seatId) {
+                    if (seat.isSelected === true) {
+                        return {
+                            ...seat,
+                            isSelected: false,
+                        }
+                    }
+                    return {
+                        ...seat,
+                        isSelected: true,
+                    };
+                } else {
+                    return seat;
+                }
+            }
+            )
+        );
+    }
+
+    function selectUnavailableSeat() {
+        alert("Esse assento não está disponível");
+    }
+
+    const urlPost = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many"
+
+    function bookSeat() {
+        const promise = axios.post(urlPost, postTemplate);
+
+        promise.then((response) => {
+            console.log(response.config.data);
+        })
+
+        promise.catch((error) => {
+            console.log(error);
+        })
+
+    }
 
     return (
         <PageContainer>
             Selecione o(s) assento(s)
 
             <SeatsContainer>
-                {seats.map(seat =>
+                {seats.map((seat) => (
                     <SeatItem
                         data-test="seat"
-                        colorBackground={(seat.isAvailable) ? "#C3CFD9" : "#FBE192"}
-                        colorBorder={(seat.isAvailable) ? "#7B8B99" : "#F7C52B"}
-                        key={seat.id}>
+                        onClick={seat.isAvailable ? () => selectSeat(seat.id) : selectUnavailableSeat}
+                        colorBackground={
+                            seat.isSelected ? "#1AAE9E" :
+                                seat.isAvailable ? "#C3CFD9" : "#FBE192"
+                        }
+                        colorBorder={
+                            seat.isSelected ? "#0E7D71" :
+                                seat.isAvailable ? "#7B8B99" : "#F7C52B"
+                        }
+                        key={seat.id}
+                    >
                         {seat.name}
-                    </SeatItem>)}
+                    </SeatItem>
+                ))}
             </SeatsContainer>
 
             <CaptionContainer>
@@ -62,12 +131,13 @@ export default function SeatsPage() {
 
             <FormContainer>
                 Nome do Comprador:
-                <input data-test="client-name" placeholder="Digite seu nome..." />
+                <input onChange={event => setName(event.target.value)} data-test="client-name" placeholder="Digite seu nome..." />
 
                 CPF do Comprador:
-                <input data-test="client-cpf" placeholder="Digite seu CPF..." />
-
-                <button data-test="book-seat-btn">Reservar Assento(s)</button>
+                <input onChange={event => setCpf(event.target.value)} data-test="client-cpf" placeholder="Digite seu CPF..." />
+                <Link to={"/sucesso"}>
+                    <button onClick={bookSeat} data-test="book-seat-btn">Reservar Assento(s)</button>
+                </Link>
             </FormContainer>
 
             <FooterContainer data-test="footer">
@@ -76,7 +146,9 @@ export default function SeatsPage() {
                 </div>
                 <div>
                     <p>{sessionMovie.title}</p>
-                    <p>{sessionDay} - {sessionData.name}</p>
+                    <p>
+                        {sessionDay} - {sessionData.name}
+                    </p>
                 </div>
             </FooterContainer>
 
