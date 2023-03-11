@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export default function SeatsPage() {
+export default function SeatsPage(props) {
 
     const { idSessao } = useParams();
 
@@ -27,6 +27,9 @@ export default function SeatsPage() {
             setSessionData(response.data);
             setSessionMovie(response.data.movie);
             setSessionDay(response.data.day.weekday);
+            props.setDay(response.data.day.date);
+            props.setNameMovie(response.data.movie.title);
+            props.setTime(response.data.name);
         });
         request.catch((erro) => {
             console.log(erro.response.data);
@@ -49,7 +52,7 @@ export default function SeatsPage() {
             setArrayIds([...arrayIds, seatId]);
         } else {
             setArrayIds(arrayIds.filter(item => item != seatId));
-        }
+        };
         setSeats(
             seats.map((seat) => {
                 if (seat.id === seatId) {
@@ -75,19 +78,21 @@ export default function SeatsPage() {
         alert("Esse assento não está disponível");
     }
 
-    const urlPost = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many"
+    const urlPost = "https://mock-api.driven.com.br/api/v8/cineflex/seats/book-many";
 
     function bookSeat() {
+        props.setNumberSeat(arrayIds);
+        props.setNameSuccess(name);
+        props.setCpfSuccess(cpf);
         const promise = axios.post(urlPost, postTemplate);
 
         promise.then((response) => {
             console.log(response.config.data);
-        })
+        });
 
         promise.catch((error) => {
             console.log(error);
-        })
-
+        });
     }
 
     return (

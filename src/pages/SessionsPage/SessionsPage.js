@@ -29,7 +29,6 @@ export default function SessionsPage() {
             Selecione o horário
             <div>
                 {sessionsDays.map(day =>
-
                     <SessionContainer data-test="movie-day" key={day.id}>
                         {day.weekday} - {day.date}
                         <ButtonsContainer>
