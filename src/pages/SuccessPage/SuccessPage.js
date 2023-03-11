@@ -8,25 +8,25 @@ export default function SuccessPage(props) {
         <PageContainer>
             <h1>Pedido feito <br /> com sucesso!</h1>
 
-            <TextContainer>
+            <TextContainer data-test="movie-info">
                 <strong><p>Filme e sessão</p></strong>
                 <p>{props.nameMovie}</p>
                 <p>{props.day} - {props.time}</p>
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="seats-info">
                 <strong><p>Ingressos</p></strong>
                 {tickets.map((ticket) => (
                     <p key={ticket}>Assento {ticket}</p>
                 ))}
             </TextContainer>
 
-            <TextContainer>
+            <TextContainer data-test="client-info">
                 <strong><p>Comprador</p></strong>
                 <p>Nome: {props.nameSuccess}</p>
                 <p>CPF: {props.cpfSuccess}</p>
             </TextContainer>
-            <Link to={"/"}>
+            <Link data-test="go-home-btn" to={"/"}>
                 <button>Voltar para Home</button>
             </Link>
         </PageContainer>
