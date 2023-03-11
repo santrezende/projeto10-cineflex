@@ -136,10 +136,10 @@ export default function SeatsPage(props) {
 
             <FormContainer>
                 Nome do Comprador:
-                <input onChange={event => setName(event.target.value)} data-test="client-name" placeholder="Digite seu nome..." />
+                <input onChange={event => setName(event.target.value)} data-test="client-name" value={name} placeholder="Digite seu nome..." />
 
                 CPF do Comprador:
-                <input onChange={event => setCpf(event.target.value)} data-test="client-cpf" placeholder="Digite seu CPF..." />
+                <input onChange={event => setCpf(event.target.value)} data-test="client-cpf" value={cpf} placeholder="Digite seu CPF..." />
                 <Link to={"/sucesso"}>
                     <button onClick={bookSeat} data-test="book-seat-btn">Reservar Assento(s)</button>
                 </Link>
