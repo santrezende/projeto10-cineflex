@@ -9,7 +9,6 @@ import ReturnBtn from "./components/ReturnBtn";
 
 export default function App() {
 
-    const [lastAddress, setLastAddress] = React.useState("/");
     const [renderButton, setRenderButton] = React.useState(false);
 
     const [nameMovie, setNameMovie] = React.useState("");
@@ -22,11 +21,11 @@ export default function App() {
     return (
         <>
             <BrowserRouter>
-                <ReturnBtn renderButton={renderButton} lastAddress={lastAddress} />
+                <ReturnBtn renderButton={renderButton} />
                 <NavContainer>CINEFLEX</NavContainer>
                 <Routes>
-                    <Route path="/" element={<HomePage setRenderButton={setRenderButton} setLastAddress={setLastAddress} />} />
-                    <Route path="/sessoes/:idFilme" element={<SessionsPage setRenderButton={setRenderButton} setLastAddress={setLastAddress} />} />
+                    <Route path="/" element={<HomePage setRenderButton={setRenderButton} />} />
+                    <Route path="/sessoes/:idFilme" element={<SessionsPage setRenderButton={setRenderButton} />} />
                     <Route path="/assentos/:idSessao" element={<SeatsPage
                         day={day}
                         setDay={setDay}
@@ -41,7 +40,6 @@ export default function App() {
                         cpfSuccess={cpfSuccess}
                         setCpfSuccess={setCpfSuccess}
                         setRenderButton={setRenderButton}
-                        setLastAddress={setLastAddress}
                     />} />
                     <Route path="/sucesso" element={<SuccessPage
                         day={day}

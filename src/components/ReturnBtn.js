@@ -5,7 +5,7 @@ export default function ReturnBtn(props) {
     const navigate = useNavigate();
 
     function goLastPage() {
-        navigate(props.lastAddress);
+        navigate(-1);
     }
 
     return (

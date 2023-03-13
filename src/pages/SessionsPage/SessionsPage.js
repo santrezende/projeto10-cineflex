@@ -14,7 +14,6 @@ export default function SessionsPage(props) {
 
     useEffect(() => {
         const request = axios.get(url);
-        props.setLastAddress("/");
 
         request.then(response => {
             setSessions(response.data);
@@ -36,7 +35,6 @@ export default function SessionsPage(props) {
                             {day.showtimes.map(showtime =>
                                 <Link onClick={() => {
                                     props.setRenderButton(true);
-                                    props.setLastAddress(`/sessoes/${idFilme}`);
                                 }} key={showtime.id} to={`/assentos/${showtime.id}`}>
                                     <button data-test="showtime" key={showtime.id}>{showtime.name}</button>
                                 </Link>
