@@ -140,7 +140,7 @@ export default function SeatsPage(props) {
 
                 CPF do Comprador:
                 <input onChange={event => setCpf(event.target.value)} data-test="client-cpf" value={cpf} placeholder="Digite seu CPF..." />
-                <Link to={"/sucesso"}>
+                <Link onClick={() => props.setRenderButton(false)} to={"/sucesso"}>
                     <button onClick={bookSeat} data-test="book-seat-btn">Reservar Assento(s)</button>
                 </Link>
             </FormContainer>

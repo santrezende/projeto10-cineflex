@@ -4,7 +4,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export default function SessionsPage() {
+export default function SessionsPage(props) {
 
     const { idFilme } = useParams();
 
@@ -14,6 +14,7 @@ export default function SessionsPage() {
 
     useEffect(() => {
         const request = axios.get(url);
+        props.setLastAddress("/");
 
         request.then(response => {
             setSessions(response.data);
@@ -33,7 +34,10 @@ export default function SessionsPage() {
                         {day.weekday} - {day.date}
                         <ButtonsContainer>
                             {day.showtimes.map(showtime =>
-                                <Link key={showtime.id} to={`/assentos/${showtime.id}`}>
+                                <Link onClick={() => {
+                                    props.setRenderButton(true);
+                                    props.setLastAddress(`/sessoes/${idFilme}`);
+                                }} key={showtime.id} to={`/assentos/${showtime.id}`}>
                                     <button data-test="showtime" key={showtime.id}>{showtime.name}</button>
                                 </Link>
                             )}

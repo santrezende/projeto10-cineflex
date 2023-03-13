@@ -3,11 +3,12 @@ import React, { useEffect } from "react";
 import { Link } from "react-router-dom"
 import axios from "axios";
 
-export default function HomePage() {
+export default function HomePage(props) {
     const url = "https://mock-api.driven.com.br/api/v8/cineflex/movies";
     const [movies, setMovies] = React.useState([]);
 
     useEffect(() => {
+        props.setRenderButton(false);
         const request = axios.get(url);
 
         request.then(response => {
@@ -24,7 +25,7 @@ export default function HomePage() {
 
             <ListContainer>
                 {movies.map(movie =>
-                    <Link key={movie.id} to={`/sessoes/${movie.id}`}>
+                    <Link key={movie.id} onClick={() => props.setRenderButton(true)} to={`/sessoes/${movie.id}`}>
                         <MovieContainer data-test="movie">
                             <img src={movie.posterURL} alt="poster" />
                         </MovieContainer>
